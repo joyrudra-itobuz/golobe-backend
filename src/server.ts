@@ -2,8 +2,9 @@ import express, { Request, Response, NextFunction } from "express";
 import cors from "cors";
 import StatusCodes from "./enums/statusCodes.enum";
 import config from "./config/config";
-import connectDb from "./config/databaseConnection";
+import connectDb from "./config/database.connection.config";
 import commonRouter from "./routes/common.routes";
+import loggerMiddleware from "./middlewares/logger/logger.middleware";
 
 /* Connect To DB */
 connectDb();
@@ -16,6 +17,7 @@ export const server = app.listen(config.PORT ?? 8070, () => {
 
 app.use(cors());
 app.use(express.json());
+app.use(loggerMiddleware);
 app.use(commonRouter);
 
 app.use("/hello", (req, res, next) => {

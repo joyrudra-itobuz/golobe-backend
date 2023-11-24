@@ -133,6 +133,6 @@
   "include": [
     "src/*.ts",
     "src/config/config.ts",
-    "src/config/databaseConnection.ts"
+    "src/config/database.connection.config.ts"
   ]
 }
