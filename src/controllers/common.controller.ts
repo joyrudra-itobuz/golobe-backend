@@ -1,7 +1,7 @@
 import { RequestHandler } from "express";
 import bycrypt from "bcrypt";
 import config from "../config/config";
-import { userModel } from "../model/userModel";
+import userModel from "../model/user.model";
 import { v4 as uuidv4 } from "uuid";
 import StatusCodes from "../enums/statusCodes.enum";
 import { tokenGenerator } from "../helper/token.helper";
@@ -41,7 +41,6 @@ export default class CommonController {
       res.status(StatusCodes.OK).send({
         message: "Successful",
         success: true,
-        token: tokenGenerator({ id: userId }),
       });
     } catch (error) {
       console.log(error);
@@ -72,7 +71,11 @@ export default class CommonController {
         return next(new Error("Invalid Password"));
       }
 
-      res.send({ success: true, message: "Welcome To GoLobe" });
+      res.send({
+        success: true,
+        message: "Welcome To GoLobe",
+        token: tokenGenerator({ id: user.id }),
+      });
     } catch (error) {
       res.status(StatusCodes.NOT_FOUND);
       next(error);

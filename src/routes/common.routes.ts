@@ -1,5 +1,5 @@
 import express from "express";
-import CommonController from "../controllers/commonController";
+import CommonController from "../controllers/common.controller";
 
 const commonController = new CommonController();
 

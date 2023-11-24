@@ -3,7 +3,7 @@ import cors from "cors";
 import StatusCodes from "./enums/statusCodes.enum";
 import config from "./config/config";
 import connectDb from "./config/databaseConnection";
-import commonRouter from "./routes/commonRoutes";
+import commonRouter from "./routes/common.routes";
 
 /* Connect To DB */
 connectDb();

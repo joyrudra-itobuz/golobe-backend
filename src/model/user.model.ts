@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import { UserModel } from "../interfaces/model.interfaces";
 import { v4 as uuidv4 } from "uuid";
+import { UserTypes } from "../enums/types.enum";
 
 const userSchema = new mongoose.Schema(
   {
@@ -14,6 +15,7 @@ const userSchema = new mongoose.Schema(
     imageName: { type: String },
     lastLogin: { type: String },
     deleteStatus: { type: Boolean, default: false },
+    userType: { type: String, enum: UserTypes, required: true },
   },
   {
     timestamps: true,
@@ -22,4 +24,6 @@ const userSchema = new mongoose.Schema(
   }
 );
 
-export const userModel = mongoose.model<UserModel>("users", userSchema);
+const userModel = mongoose.model<UserModel>("users", userSchema);
+
+export default userModel;

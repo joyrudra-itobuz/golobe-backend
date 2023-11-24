@@ -1,8 +1,8 @@
 import jwt from "jsonwebtoken";
-import { JwtPayload } from "../interfaces/jwt";
+import { JwtCustomPayload } from "../interfaces/jwt";
 import config from "../config/config";
 
-export function tokenGenerator(payload: JwtPayload) {
+export function tokenGenerator(payload: JwtCustomPayload) {
   const accessToken = jwt.sign(payload, config.JWT_SECRET, {
     expiresIn: config.ACCESS_TOKEN_EXPIRES_IN || "4h",
   });
