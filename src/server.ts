@@ -36,6 +36,6 @@ app.use((req, res, next) => {
 
 app.use((error: Error, req: Request, res: Response, next: NextFunction) => {
   res
-    .status(StatusCodes.NOT_FOUND)
+    .status(res.statusCode || StatusCodes.NOT_FOUND)
     .send({ message: error.message, success: false });
 });

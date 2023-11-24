@@ -15,7 +15,7 @@ router.post(
   commonController.addEditUser
 );
 
-router.post('/login', commonController.login);
+router.post('/login', [checkRequestPlatform], commonController.login);
 
 router.get('/profile', [validateToken], commonController.getProfile);
 

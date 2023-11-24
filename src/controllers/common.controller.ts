@@ -5,6 +5,7 @@ import userModel from '../model/user.model';
 import { v4 as uuidv4 } from 'uuid';
 import StatusCodes from '../enums/statusCodes.enum';
 import { tokenGenerator } from '../helper/token.helper';
+import { UserTypes } from '../enums/types.enum';
 
 export default class CommonController {
   addEditUser: RequestHandler = async (req, res, next) => {
@@ -79,6 +80,14 @@ export default class CommonController {
       if (!user) {
         res.status(StatusCodes.NOT_FOUND);
         return next(new Error('User Not Found!'));
+      }
+
+      if (
+        user.userType === UserTypes.USER &&
+        req.body.authData.reqPlatform !== UserTypes.APP
+      ) {
+        res.status(StatusCodes.FORBIDDEN);
+        next(new Error('Access Denied!'));
       }
 
       const isPasswordValid = await bycrypt.compare(password, user.password);

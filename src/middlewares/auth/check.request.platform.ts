@@ -19,9 +19,9 @@ export default async function checkRequestPlatform(
 
     if (headerType === UserTypes.ADMIN) {
       reqPlatform = UserTypes.ADMIN;
+    } else {
+      reqPlatform = UserTypes.APP;
     }
-
-    reqPlatform = UserTypes.APP;
 
     req.body.authData = { reqPlatform };
 
