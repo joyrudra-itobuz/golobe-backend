@@ -23,7 +23,9 @@ export default async function checkRequestPlatform(
 
     reqPlatform = UserTypes.APP;
 
-    req.body.req.body.authData.reqPlatform = reqPlatform;
+    req.body.authData = { reqPlatform };
+
+    next();
   } catch (error) {
     next(error);
   }

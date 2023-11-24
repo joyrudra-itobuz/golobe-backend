@@ -23,16 +23,17 @@ export default class CommonController {
         next(new Error('Email Address Cannot Be Edited'));
       }
 
-      const { id } = req.body;
-      let { password } = req.body;
+      let { password, id } = req.body;
 
-      password = await bycrypt.hash(password, config.SALT_VALUE);
-
-      if (userDetails && !password) {
-        password = req.body.authData.useDetails.password;
+      if (password) {
+        password = await bycrypt.hash(password, config.SALT_VALUE);
       }
 
-      const userId = id ?? uuidv4();
+      if (userDetails && !password) {
+        password = userDetails.password;
+      }
+
+      const userId = userDetails.id ?? id ?? uuidv4();
 
       const response = await userModel.findOneAndUpdate(
         {
@@ -55,6 +56,7 @@ export default class CommonController {
       res.status(StatusCodes.OK).send({
         message: 'Successful',
         success: true,
+        data: response,
       });
     } catch (error) {
       console.log(error);
@@ -87,11 +89,28 @@ export default class CommonController {
 
       res.send({
         success: true,
-        message: 'Welcome To GoLobe',
-        token: tokenGenerator({ id: user.id }),
+        message: 'Welcome To GoLobe!',
+        data: { token: tokenGenerator({ id: user.id }), user },
       });
     } catch (error) {
       res.status(StatusCodes.NOT_FOUND);
+      next(error);
+    }
+  };
+
+  getProfile: RequestHandler = async (req, res, next) => {
+    try {
+      const userDetails = req.body.authData.userDetails;
+      if (!userDetails) {
+        res.status(StatusCodes.UNAUTHORIZED);
+        next(new Error('Authentication Failed!'));
+      }
+
+      res.send({
+        data: userDetails,
+        success: true,
+      });
+    } catch (error) {
       next(error);
     }
   };

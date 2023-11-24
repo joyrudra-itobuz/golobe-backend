@@ -6,7 +6,7 @@ import config from '../../config/config';
 import StatusCodes from '../../enums/statusCodes.enum';
 import { UserTypes } from '../../enums/types.enum';
 
-export default async function validateUserType(
+export default async function validateToken(
   req: Request,
   res: Response,
   next: NextFunction
@@ -38,7 +38,9 @@ export default async function validateUserType(
       next(new Error('Access denied!'));
     }
 
-    req.body.authData.userDetails = user;
+    req.body.authData = { userDetails: user };
+
+    next();
   } catch (error) {
     next(error);
   }
