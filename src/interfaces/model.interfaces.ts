@@ -1,5 +1,5 @@
-import { Document } from "mongoose";
-import { UserTypes } from "../enums/types.enum";
+import { Document } from 'mongoose';
+import { UserTypes } from '../enums/types.enum';
 
 export interface UserModel extends Document {
   firstName?: string;

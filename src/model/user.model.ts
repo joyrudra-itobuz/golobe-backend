@@ -1,7 +1,7 @@
-import mongoose from "mongoose";
-import { UserModel } from "../interfaces/model.interfaces";
-import { v4 as uuidv4 } from "uuid";
-import { UserTypes } from "../enums/types.enum";
+import mongoose from 'mongoose';
+import { UserModel } from '../interfaces/model.interfaces';
+import { v4 as uuidv4 } from 'uuid';
+import { UserTypes } from '../enums/types.enum';
 
 const userSchema = new mongoose.Schema(
   {
@@ -9,7 +9,7 @@ const userSchema = new mongoose.Schema(
     firstName: { type: String },
     lastName: { type: String },
     email: { type: String, required: true, unique: true },
-    phoneNumber: { type: String },
+    phoneNumber: { type: String, unique: true },
     password: { type: String, required: true },
     profileImage: { type: String },
     imageName: { type: String },
@@ -24,6 +24,6 @@ const userSchema = new mongoose.Schema(
   }
 );
 
-const userModel = mongoose.model<UserModel>("users", userSchema);
+const userModel = mongoose.model<UserModel>('users', userSchema);
 
 export default userModel;

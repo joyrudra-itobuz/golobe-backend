@@ -1,10 +1,10 @@
-import { Request, Response, NextFunction } from "express";
-import userModel from "../../model/user.model";
-import jwt from "jsonwebtoken";
-import { JwtCustomPayload } from "../../interfaces/jwt";
-import config from "../../config/config";
-import StatusCodes from "../../enums/statusCodes.enum";
-import { UserTypes } from "../../enums/types.enum";
+import { Request, Response, NextFunction } from 'express';
+import userModel from '../../model/user.model';
+import jwt from 'jsonwebtoken';
+import { JwtCustomPayload } from '../../interfaces/jwt';
+import config from '../../config/config';
+import StatusCodes from '../../enums/statusCodes.enum';
+import { UserTypes } from '../../enums/types.enum';
 
 export default async function validateUserType(
   req: Request,
@@ -12,13 +12,13 @@ export default async function validateUserType(
   next: NextFunction
 ) {
   try {
-    const token = req.headers.authorization?.split(" ")[1] as string;
+    const token = req.headers.authorization?.split(' ')[1] as string;
 
     const isTokenValid = jwt.verify(token, config.JWT_SECRET);
 
     if (!isTokenValid) {
       res.status(StatusCodes.UNAUTHORIZED);
-      next(new Error("Invalid Token"));
+      next(new Error('Invalid Token'));
     }
 
     const getPayload = jwt.decode(token, { json: true }) as JwtCustomPayload;
@@ -27,7 +27,7 @@ export default async function validateUserType(
 
     if (!user) {
       res.status(StatusCodes.NOT_FOUND);
-      next(new Error("User Not Found"));
+      next(new Error('User Not Found'));
     }
 
     if (
@@ -35,10 +35,10 @@ export default async function validateUserType(
       req.body.authData.reqPlatform !== UserTypes.APP
     ) {
       res.status(StatusCodes.FORBIDDEN);
-      next(new Error("Access denied!"));
+      next(new Error('Access denied!'));
     }
 
-    req.body.authData.useDetails = user;
+    req.body.authData.userDetails = user;
   } catch (error) {
     next(error);
   }
