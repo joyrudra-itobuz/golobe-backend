@@ -5,9 +5,12 @@ import config from './config/config';
 import connectDb from './config/database.connection.config';
 import commonRouter from './routes/common.routes';
 import loggerMiddleware from './middlewares/logger/logger.middleware';
+import connectToPostgres from './config/postgres.connection';
 
 /* Connect To DB */
 connectDb();
+
+connectToPostgres();
 
 const app = express();
 

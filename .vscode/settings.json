@@ -1,3 +1,4 @@
 {
-  "cSpell.words": ["bycrypt", "uuidv"]
+  "cSpell.words": ["bycrypt", "uuidv"],
+  "git.allowForcePush": false
 }
