@@ -21,6 +21,7 @@ const {
   warnOnce,
   defineDmmfProperty,
   Public,
+  detectRuntime,
 } = require('./runtime/edge')
 
 
@@ -30,12 +31,12 @@ exports.Prisma = Prisma
 exports.$Enums = {}
 
 /**
- * Prisma Client JS version: 5.6.0
- * Query Engine version: e95e739751f42d8ca026f6b910f5a2dc5adeaeee
+ * Prisma Client JS version: 5.7.0
+ * Query Engine version: 79fb5193cf0a8fdbef536e4b4a159cad677ab1b9
  */
 Prisma.prismaVersion = {
-  client: "5.6.0",
-  engine: "e95e739751f42d8ca026f6b910f5a2dc5adeaeee"
+  client: "5.7.0",
+  engine: "79fb5193cf0a8fdbef536e4b4a159cad677ab1b9"
 }
 
 Prisma.PrismaClientKnownRequestError = PrismaClientKnownRequestError;
@@ -93,6 +94,35 @@ exports.Prisma.UserScalarFieldEnum = {
   password: 'password'
 };
 
+exports.Prisma.DemoUserScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  email: 'email',
+  age: 'age',
+  role: 'role',
+  demoUserPreferencesId: 'demoUserPreferencesId'
+};
+
+exports.Prisma.DemoUserPreferencesScalarFieldEnum = {
+  id: 'id',
+  emailUpdates: 'emailUpdates'
+};
+
+exports.Prisma.DemoPostScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  avgRating: 'avgRating',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  authorId: 'authorId',
+  favById: 'favById'
+};
+
+exports.Prisma.DemoCategoryScalarFieldEnum = {
+  id: 'id',
+  name: 'name'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -103,9 +133,22 @@ exports.Prisma.QueryMode = {
   insensitive: 'insensitive'
 };
 
+exports.Prisma.NullsOrder = {
+  first: 'first',
+  last: 'last'
+};
+exports.Role = exports.$Enums.Role = {
+  BASIC: 'BASIC',
+  EDITOR: 'EDITOR',
+  ADMIN: 'ADMIN'
+};
 
 exports.Prisma.ModelName = {
-  User: 'User'
+  User: 'User',
+  DemoUser: 'DemoUser',
+  DemoUserPreferences: 'DemoUserPreferences',
+  DemoPost: 'DemoPost',
+  DemoCategory: 'DemoCategory'
 };
 /**
  * Create the Client
@@ -139,8 +182,8 @@ const config = {
     "schemaEnvPath": "../../../../.env"
   },
   "relativePath": "../..",
-  "clientVersion": "5.6.0",
-  "engineVersion": "e95e739751f42d8ca026f6b910f5a2dc5adeaeee",
+  "clientVersion": "5.7.0",
+  "engineVersion": "79fb5193cf0a8fdbef536e4b4a159cad677ab1b9",
   "datasourceNames": [
     "db"
   ],
@@ -154,13 +197,13 @@ const config = {
       }
     }
   },
-  "inlineSchema": "Z2VuZXJhdG9yIGNsaWVudCB7CiAgcHJvdmlkZXIgPSAicHJpc21hLWNsaWVudC1qcyIKICBvdXRwdXQgICA9ICIuL2dlbmVyYXRlZC9jbGllbnQiCn0KCmRhdGFzb3VyY2UgZGIgewogIHByb3ZpZGVyID0gInBvc3RncmVzcWwiCiAgdXJsICAgICAgPSBlbnYoIkRBVEFCQVNFX1VSTCIpCn0KCi8vIFVzZSBVVUlEIGFzIHRoZSBkZWZhdWx0IElECm1vZGVsIFVzZXIgewogIGlkICAgIFN0cmluZyAgICBAaWQgQGRlZmF1bHQoZGJnZW5lcmF0ZWQoKSkgQGRiLlV1aWQKICBuYW1lICBTdHJpbmcKICBlbWFpbCBTdHJpbmcgIEB1bmlxdWUKICBwYXNzd29yZCBTdHJpbmcgCn0K",
-  "inlineSchemaHash": "bc325bf5b7d91b6d4bc344314c23c0e564829bab897bdda8360efd799816559c",
+  "inlineSchema": "Z2VuZXJhdG9yIGNsaWVudCB7CiAgICBwcm92aWRlciA9ICJwcmlzbWEtY2xpZW50LWpzIgogICAgb3V0cHV0ICAgPSAiLi9nZW5lcmF0ZWQvY2xpZW50Igp9CgpkYXRhc291cmNlIGRiIHsKICAgIHByb3ZpZGVyID0gInBvc3RncmVzcWwiCiAgICB1cmwgICAgICA9IGVudigiREFUQUJBU0VfVVJMIikKfQoKLy8gVXNlIFVVSUQgYXMgdGhlIGRlZmF1bHQgSUQKbW9kZWwgVXNlciB7CiAgICBpZCAgICAgICBTdHJpbmcgQGlkIEBkZWZhdWx0KGRiZ2VuZXJhdGVkKCkpIEBkYi5VdWlkCiAgICBuYW1lICAgICBTdHJpbmcKICAgIGVtYWlsICAgIFN0cmluZyBAdW5pcXVlCiAgICBwYXNzd29yZCBTdHJpbmcKfQoKbW9kZWwgRGVtb1VzZXIgewogICAgaWQgICAgICAgICAgICAgICAgICAgIFN0cmluZyAgICAgICAgICAgICAgIEBpZCBAZGVmYXVsdCh1dWlkKCkpCiAgICBuYW1lICAgICAgICAgICAgICAgICAgU3RyaW5nCiAgICBlbWFpbCAgICAgICAgICAgICAgICAgU3RyaW5nICAgICAgICAgICAgICAgQHVuaXF1ZQogICAgYWdlICAgICAgICAgICAgICAgICAgIEludAogICAgcm9sZSAgICAgICAgICAgICAgICAgIFJvbGUgICAgICAgICAgICAgICAgIEBkZWZhdWx0KEJBU0lDKQogICAgd3JpdHRlblBvc3RzICAgICAgICAgIERlbW9Qb3N0W10gICAgICAgICAgIEByZWxhdGlvbigiV3JpdHRlblBvc3RzIikKICAgIGZhdlBvc3RzICAgICAgICAgICAgICBEZW1vUG9zdFtdICAgICAgICAgICBAcmVsYXRpb24oIkZhdlBvc3RzIikKICAgIGRlbW9Vc2VyUHJlZmVyZW5jZXMgICBEZW1vVXNlclByZWZlcmVuY2VzPyBAcmVsYXRpb24oZmllbGRzOiBbZGVtb1VzZXJQcmVmZXJlbmNlc0lkXSwgcmVmZXJlbmNlczogW2lkXSkKICAgIGRlbW9Vc2VyUHJlZmVyZW5jZXNJZCBTdHJpbmc/ICAgICAgICAgICAgICBAdW5pcXVlCgogICAgQEB1bmlxdWUoW25hbWUsIGFnZV0pCiAgICBAQGluZGV4KFtlbWFpbF0pCn0KCm1vZGVsIERlbW9Vc2VyUHJlZmVyZW5jZXMgewogICAgaWQgICAgICAgICAgIFN0cmluZyAgICBAaWQgQGRlZmF1bHQodXVpZCgpKQogICAgZW1haWxVcGRhdGVzIEJvb2xlYW4KICAgIGRlbW9Vc2VyICAgICBEZW1vVXNlcj8KfQoKbW9kZWwgRGVtb1Bvc3QgewogICAgaWQgICAgICAgICBTdHJpbmcgICAgICAgICBAaWQgQGRlZmF1bHQodXVpZCgpKQogICAgdGl0bGUgICAgICBTdHJpbmcKICAgIGF2Z1JhdGluZyAgRmxvYXQKICAgIGNyZWF0ZWRBdCAgRGF0ZVRpbWUgICAgICAgQGRlZmF1bHQobm93KCkpCiAgICB1cGRhdGVkQXQgIERhdGVUaW1lICAgICAgIEB1cGRhdGVkQXQKICAgIGF1dGhvciAgICAgRGVtb1VzZXIgICAgICAgQHJlbGF0aW9uKCJXcml0dGVuUG9zdHMiLCBmaWVsZHM6IFthdXRob3JJZF0sIHJlZmVyZW5jZXM6IFtpZF0pCiAgICBhdXRob3JJZCAgIFN0cmluZwogICAgZmF2QnkgICAgICBEZW1vVXNlcj8gICAgICBAcmVsYXRpb24oIkZhdlBvc3RzIiwgZmllbGRzOiBbZmF2QnlJZF0sIHJlZmVyZW5jZXM6IFtpZF0pCiAgICBmYXZCeUlkICAgIFN0cmluZz8KICAgIGNhdGVnb3JpZXMgRGVtb0NhdGVnb3J5W10KfQoKbW9kZWwgRGVtb0NhdGVnb3J5IHsKICAgIGlkICAgIFN0cmluZyAgICAgQGlkIEBkZWZhdWx0KHV1aWQoKSkKICAgIG5hbWUgIFN0cmluZwogICAgcG9zdHMgRGVtb1Bvc3RbXQp9CgplbnVtIFJvbGUgewogICAgQkFTSUMKICAgIEVESVRPUgogICAgQURNSU4KfQo=",
+  "inlineSchemaHash": "a4de219b39135352253d07f46d956fa3c3b5466a7e9228095b890836c5c72d0c",
   "noEngine": false
 }
 config.dirname = '/'
 
-config.runtimeDataModel = JSON.parse("{\"models\":{\"User\":{\"dbName\":null,\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":true,\"isReadOnly\":false,\"hasDefaultValue\":true,\"type\":\"String\",\"default\":{\"name\":\"dbgenerated\",\"args\":[]},\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"name\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"String\",\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"email\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":true,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"String\",\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"password\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"String\",\"isGenerated\":false,\"isUpdatedAt\":false}],\"primaryKey\":null,\"uniqueFields\":[],\"uniqueIndexes\":[],\"isGenerated\":false}},\"enums\":{},\"types\":{}}")
+config.runtimeDataModel = JSON.parse("{\"models\":{\"User\":{\"dbName\":null,\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":true,\"isReadOnly\":false,\"hasDefaultValue\":true,\"type\":\"String\",\"default\":{\"name\":\"dbgenerated\",\"args\":[]},\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"name\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"String\",\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"email\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":true,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"String\",\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"password\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"String\",\"isGenerated\":false,\"isUpdatedAt\":false}],\"primaryKey\":null,\"uniqueFields\":[],\"uniqueIndexes\":[],\"isGenerated\":false},\"DemoUser\":{\"dbName\":null,\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":true,\"isReadOnly\":false,\"hasDefaultValue\":true,\"type\":\"String\",\"default\":{\"name\":\"uuid\",\"args\":[]},\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"name\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"String\",\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"email\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":true,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"String\",\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"age\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"Int\",\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"role\",\"kind\":\"enum\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":true,\"type\":\"Role\",\"default\":\"BASIC\",\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"writtenPosts\",\"kind\":\"object\",\"isList\":true,\"isRequired\":true,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"DemoPost\",\"relationName\":\"WrittenPosts\",\"relationFromFields\":[],\"relationToFields\":[],\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"favPosts\",\"kind\":\"object\",\"isList\":true,\"isRequired\":true,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"DemoPost\",\"relationName\":\"FavPosts\",\"relationFromFields\":[],\"relationToFields\":[],\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"demoUserPreferences\",\"kind\":\"object\",\"isList\":false,\"isRequired\":false,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"DemoUserPreferences\",\"relationName\":\"DemoUserToDemoUserPreferences\",\"relationFromFields\":[\"demoUserPreferencesId\"],\"relationToFields\":[\"id\"],\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"demoUserPreferencesId\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":false,\"isUnique\":true,\"isId\":false,\"isReadOnly\":true,\"hasDefaultValue\":false,\"type\":\"String\",\"isGenerated\":false,\"isUpdatedAt\":false}],\"primaryKey\":null,\"uniqueFields\":[[\"name\",\"age\"]],\"uniqueIndexes\":[{\"name\":null,\"fields\":[\"name\",\"age\"]}],\"isGenerated\":false},\"DemoUserPreferences\":{\"dbName\":null,\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":true,\"isReadOnly\":false,\"hasDefaultValue\":true,\"type\":\"String\",\"default\":{\"name\":\"uuid\",\"args\":[]},\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"emailUpdates\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"Boolean\",\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"demoUser\",\"kind\":\"object\",\"isList\":false,\"isRequired\":false,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"DemoUser\",\"relationName\":\"DemoUserToDemoUserPreferences\",\"relationFromFields\":[],\"relationToFields\":[],\"isGenerated\":false,\"isUpdatedAt\":false}],\"primaryKey\":null,\"uniqueFields\":[],\"uniqueIndexes\":[],\"isGenerated\":false},\"DemoPost\":{\"dbName\":null,\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":true,\"isReadOnly\":false,\"hasDefaultValue\":true,\"type\":\"String\",\"default\":{\"name\":\"uuid\",\"args\":[]},\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"title\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"String\",\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"avgRating\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"Float\",\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":true,\"type\":\"DateTime\",\"default\":{\"name\":\"now\",\"args\":[]},\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"DateTime\",\"isGenerated\":false,\"isUpdatedAt\":true},{\"name\":\"author\",\"kind\":\"object\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"DemoUser\",\"relationName\":\"WrittenPosts\",\"relationFromFields\":[\"authorId\"],\"relationToFields\":[\"id\"],\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"authorId\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":false,\"isReadOnly\":true,\"hasDefaultValue\":false,\"type\":\"String\",\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"favBy\",\"kind\":\"object\",\"isList\":false,\"isRequired\":false,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"DemoUser\",\"relationName\":\"FavPosts\",\"relationFromFields\":[\"favById\"],\"relationToFields\":[\"id\"],\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"favById\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":false,\"isUnique\":false,\"isId\":false,\"isReadOnly\":true,\"hasDefaultValue\":false,\"type\":\"String\",\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"categories\",\"kind\":\"object\",\"isList\":true,\"isRequired\":true,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"DemoCategory\",\"relationName\":\"DemoCategoryToDemoPost\",\"relationFromFields\":[],\"relationToFields\":[],\"isGenerated\":false,\"isUpdatedAt\":false}],\"primaryKey\":null,\"uniqueFields\":[],\"uniqueIndexes\":[],\"isGenerated\":false},\"DemoCategory\":{\"dbName\":null,\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":true,\"isReadOnly\":false,\"hasDefaultValue\":true,\"type\":\"String\",\"default\":{\"name\":\"uuid\",\"args\":[]},\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"name\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"String\",\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"posts\",\"kind\":\"object\",\"isList\":true,\"isRequired\":true,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"DemoPost\",\"relationName\":\"DemoCategoryToDemoPost\",\"relationFromFields\":[],\"relationToFields\":[],\"isGenerated\":false,\"isUpdatedAt\":false}],\"primaryKey\":null,\"uniqueFields\":[],\"uniqueIndexes\":[],\"isGenerated\":false}},\"enums\":{\"Role\":{\"values\":[{\"name\":\"BASIC\",\"dbName\":null},{\"name\":\"EDITOR\",\"dbName\":null},{\"name\":\"ADMIN\",\"dbName\":null}],\"dbName\":null}},\"types\":{}}")
 defineDmmfProperty(exports.Prisma, config.runtimeDataModel)
 config.getQueryEngineWasmModule = undefined
 

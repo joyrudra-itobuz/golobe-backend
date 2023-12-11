@@ -6,6 +6,7 @@ import connectDb from './config/database.connection.config';
 import commonRouter from './routes/common.routes';
 import loggerMiddleware from './middlewares/logger/logger.middleware';
 import connectToPostgres from './config/postgres.connection';
+import prismaMain from './demo/scripts';
 
 /* Connect To DB */
 connectDb();
@@ -42,3 +43,5 @@ app.use((error: Error, req: Request, res: Response, next: NextFunction) => {
     .status(res.statusCode || StatusCodes.NOT_FOUND)
     .send({ message: error.message, success: false });
 });
+
+prismaMain();

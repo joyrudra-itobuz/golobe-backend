@@ -1,17 +1,63 @@
 generator client {
-  provider = "prisma-client-js"
-  output   = "./generated/client"
+    provider = "prisma-client-js"
+    output   = "./generated/client"
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
 }
 
 // Use UUID as the default ID
 model User {
-  id    String    @id @default(dbgenerated()) @db.Uuid
-  name  String
-  email String  @unique
-  password String 
+    id       String @id @default(dbgenerated()) @db.Uuid
+    name     String
+    email    String @unique
+    password String
+}
+
+model DemoUser {
+    id                    String               @id @default(uuid())
+    name                  String
+    email                 String               @unique
+    age                   Int
+    role                  Role                 @default(BASIC)
+    writtenPosts          DemoPost[]           @relation("WrittenPosts")
+    favPosts              DemoPost[]           @relation("FavPosts")
+    demoUserPreferences   DemoUserPreferences? @relation(fields: [demoUserPreferencesId], references: [id])
+    demoUserPreferencesId String?              @unique
+
+    @@unique([name, age])
+    @@index([email])
+}
+
+model DemoUserPreferences {
+    id           String    @id @default(uuid())
+    emailUpdates Boolean
+    demoUser     DemoUser?
+}
+
+model DemoPost {
+    id         String         @id @default(uuid())
+    title      String
+    avgRating  Float
+    createdAt  DateTime       @default(now())
+    updatedAt  DateTime       @updatedAt
+    author     DemoUser       @relation("WrittenPosts", fields: [authorId], references: [id])
+    authorId   String
+    favBy      DemoUser?      @relation("FavPosts", fields: [favById], references: [id])
+    favById    String?
+    categories DemoCategory[]
+}
+
+model DemoCategory {
+    id    String     @id @default(uuid())
+    name  String
+    posts DemoPost[]
+}
+
+enum Role {
+    BASIC
+    EDITOR
+    ADMIN
 }

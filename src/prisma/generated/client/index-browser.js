@@ -16,12 +16,12 @@ exports.Prisma = Prisma
 exports.$Enums = {}
 
 /**
- * Prisma Client JS version: 5.6.0
- * Query Engine version: e95e739751f42d8ca026f6b910f5a2dc5adeaeee
+ * Prisma Client JS version: 5.7.0
+ * Query Engine version: 79fb5193cf0a8fdbef536e4b4a159cad677ab1b9
  */
 Prisma.prismaVersion = {
-  client: "5.6.0",
-  engine: "e95e739751f42d8ca026f6b910f5a2dc5adeaeee"
+  client: "5.7.0",
+  engine: "79fb5193cf0a8fdbef536e4b4a159cad677ab1b9"
 }
 
 Prisma.PrismaClientKnownRequestError = () => {
@@ -114,6 +114,35 @@ exports.Prisma.UserScalarFieldEnum = {
   password: 'password'
 };
 
+exports.Prisma.DemoUserScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  email: 'email',
+  age: 'age',
+  role: 'role',
+  demoUserPreferencesId: 'demoUserPreferencesId'
+};
+
+exports.Prisma.DemoUserPreferencesScalarFieldEnum = {
+  id: 'id',
+  emailUpdates: 'emailUpdates'
+};
+
+exports.Prisma.DemoPostScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  avgRating: 'avgRating',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  authorId: 'authorId',
+  favById: 'favById'
+};
+
+exports.Prisma.DemoCategoryScalarFieldEnum = {
+  id: 'id',
+  name: 'name'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -124,9 +153,22 @@ exports.Prisma.QueryMode = {
   insensitive: 'insensitive'
 };
 
+exports.Prisma.NullsOrder = {
+  first: 'first',
+  last: 'last'
+};
+exports.Role = exports.$Enums.Role = {
+  BASIC: 'BASIC',
+  EDITOR: 'EDITOR',
+  ADMIN: 'ADMIN'
+};
 
 exports.Prisma.ModelName = {
-  User: 'User'
+  User: 'User',
+  DemoUser: 'DemoUser',
+  DemoUserPreferences: 'DemoUserPreferences',
+  DemoPost: 'DemoPost',
+  DemoCategory: 'DemoCategory'
 };
 
 /**

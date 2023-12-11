@@ -1,5 +1,4 @@
 import { Client } from 'pg';
-import { v4 as uuid } from 'uuid';
 
 const client = new Client({
   user: 'postgres',
