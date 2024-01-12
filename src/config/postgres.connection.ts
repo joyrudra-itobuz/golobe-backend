@@ -11,25 +11,7 @@ const client = new Client({
 export default function connectToPostgres() {
   try {
     client.connect();
-    console.log('Connected! ✅');
-
-    getData();
-  } catch (error) {
-    console.log(error);
-  }
-}
-
-async function getData() {
-  try {
-    const res = await client.query(`Select * from car`);
-
-    // const res2 = await client.query(
-    //   `insert into car values(${uuid()}, '2010', 'Honda', 'Jon', 110)`
-    // );
-
-    // console.log(res2.rows);
-
-    console.log(res.rows);
+    console.log('Connected To Postgres! ✅');
   } catch (error) {
     console.log(error);
   }
